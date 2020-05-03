@@ -48,6 +48,32 @@ server {
     server_name csgoed.com;
     return 301 https://$host$request_uri;
 }
+
+server {
+ 
+  listen 443 ssl;
+  server_name www.csgoed.com;
+ 
+  ssl_certificate /home/crt/csgoed_com.crt;
+  ssl_certificate_key /home/crt/csgoed.pem;
+ 
+  location / {
+ 
+    proxy_pass http://mainpage:80;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+  }
+ 
+}
+
+server {
+    listen 80;
+    server_name www.csgoed.com;
+    return 301 https://$host$request_uri;
+}
  
 server {
  
